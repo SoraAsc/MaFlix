@@ -6,7 +6,7 @@ function Error() {
 
     return (
         < PageDefault >
-            <h1>Error 404</h1>
+            <h1>Opa, você não deveria estar aqui!</h1>
             <Link to="/">
                 Ir para home
             </Link>

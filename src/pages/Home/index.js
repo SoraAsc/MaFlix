@@ -12,13 +12,14 @@ function Home() {
 
       <BannerMain
 
-        videoTitle={dadosIniciais.categorias[0].videos[0].titulo}
-        url={dadosIniciais.categorias[0].videos[0].url}
-        videoDescription={"Oque é Front-end? Trabalhando na área os termos HTML,CSS e JavaScript fazem parte da rotina das desenvolvedoras e desenvolvedores. Mas o que eles fazem afinal? Descubra com a Vanessa! "}
+        videoTitle={dadosIniciais.categorias[4].videos[0].titulo}
+        url={dadosIniciais.categorias[4].videos[0].url}
+        videoDescription={"Último trailer do jogo Final Fantasy VII Remake no qual se tem como protagonista Cloud Strife. "}
+      //Oque é Front-end? Trabalhando na área os termos HTML,CSS e JavaScript fazem parte da rotina das desenvolvedoras e desenvolvedores. Mas o que eles fazem afinal? Descubra com a Vanessa!
       />
 
       <Carousel
-        ignoreFirstVideo
+
         category={dadosIniciais.categorias[0]}
       />
       <Carousel
@@ -31,6 +32,7 @@ function Home() {
         category={dadosIniciais.categorias[3]}
       />
       <Carousel
+        ignoreFirstVideo
         category={dadosIniciais.categorias[4]}
       />
       <Carousel
