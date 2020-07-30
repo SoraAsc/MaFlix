@@ -30,7 +30,9 @@ function CadastroCategoria() {
     );
   }
   useEffect(() => {
-    const URL = 'http://localhost:8080/categorias';
+    const URL = window.location.hostname.includes('localhost')
+      ? 'http://localhost:8080/categorias'
+      : 'https://maflix.herokuapp.com/categorias';
     fetch(URL)
       .then(async (res) => {
         const resposta = await res.json();
@@ -43,7 +45,7 @@ function CadastroCategoria() {
     <PageDefault>
 
       <Link to="/">
-        Ir para home
+        Ir para Home
       </Link>
 
       <div style={{ textAlign: 'center' }}>
@@ -107,6 +109,10 @@ function CadastroCategoria() {
         {categorias.map((categoria) => (
           <li key={`${categoria.nome}`}>
             {categoria.nome}
+            {' - Descrição: '}
+            {categoria.descricao}
+            {' - Cor: '}
+            {categoria.cor}
           </li>
         ))}
       </ul>
