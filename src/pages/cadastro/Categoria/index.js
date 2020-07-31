@@ -4,31 +4,38 @@ import { Link } from 'react-router-dom';
 import PageDefault from '../../../components/PageDefault';
 import FormField from '../../../components/FormField';
 import Button from '../../../components/Button';
+import useForm from '../../../hooks/useForm';
+import categoriasRepository from '../../../repositories/categorias';
+import { TableTR /* , TableTD */ } from './styles';
 
 function CadastroCategoria() {
+  const table = {
+    borderCollapse: 'collapse',
+    width: '80%',
+    marginTop: '10px',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  };
+
+  const tableth = {
+    paddingTop: '12px',
+    paddingBottom: '12px',
+    textAlign: 'center',
+    backgroundColor: 'blue',
+    color: 'white',
+
+  };
+
   const valoresIniciais = {
     nome: '',
     descricao: '',
     cor: '#ffffff',
   };
+
+  const { handleChange, values, clearForm } = useForm(valoresIniciais);
+
   const [categorias, setCategorias] = useState([]);
-  const [values, setValues] = useState(valoresIniciais);
 
-  function setValue(key, value) {
-    // chave: nome, descricao, cor
-    setValues({
-      ...values,
-      [key]: value, // nome: 'valor'
-    });
-  }
-
-  function handleChange(infosDoEvento) {
-    const { value } = infosDoEvento.target;
-    setValue(
-      infosDoEvento.target.getAttribute('name'),
-      value,
-    );
-  }
   useEffect(() => {
     const URL = window.location.hostname.includes('localhost')
       ? 'http://localhost:8080/categorias'
@@ -41,8 +48,47 @@ function CadastroCategoria() {
         ]);
       });
   }, []);
+
+  const loadcasos = (
+    <table style={table}>
+      <tbody>
+        <tr>
+          <th style={tableth}>Categorias</th>
+          <th style={tableth}>Descrição</th>
+          <th style={tableth}>Cor</th>
+          <th style={tableth}>Remove</th>
+        </tr>
+      </tbody>
+      {categorias.map((categoria) => (
+        <tbody key={`${categoria.titulo}_key${categoria.cor}`}>
+          <TableTR fieldColor={categoria.cor}>
+            <td style={{ border: `2px solid ${categoria.cor}`, padding: '8px', textAlign: 'center' }}>
+              {categoria.titulo}
+            </td>
+            <td style={{ border: `2px solid ${categoria.cor}`, padding: '8px', textAlign: 'center' }}>
+              {categoria.descricao}
+            </td>
+            <td style={{ border: `2px solid ${categoria.cor}`, padding: '8px', textAlign: 'center' }}>
+              {categoria.cor}
+            </td>
+            <td style={{ border: `2px solid ${categoria.cor}`, padding: '8px', textAlign: 'center' }}>
+              <button
+                style={{ width: '100%', backgroundColor: `${categoria.cor}` }}
+                type="button"
+                onClick={() => categoriasRepository.handleDelete(categoria.id)}
+              >
+                {' '}
+                Remove
+              </button>
+            </td>
+          </TableTR>
+        </tbody>
+      ))}
+    </table>
+  );
+
   return (
-    <PageDefault>
+    <PageDefault paddingAll={0}>
 
       <Link to="/">
         Ir para Home
@@ -51,25 +97,30 @@ function CadastroCategoria() {
       <div style={{ textAlign: 'center' }}>
         <h1>
           Cadastro de Categoria:
-          {values.nome}
+          {values.titulo}
         </h1>
         <div style={{ display: 'inline-block', justifyContent: 'center' }}>
           <form onSubmit={function handleSubmit(infosDoEvento) {
             infosDoEvento.preventDefault();
             setCategorias([
-              values,
               ...categorias,
+              values,
             ]);
 
-            setValues(valoresIniciais);
+            categoriasRepository.create({
+              titulo: values.titulo,
+              descricao: values.descricao,
+              cor: values.cor,
+            });
+            clearForm(valoresIniciais);
           }}
           >
 
             <FormField
               label="Nome da Categoria"
               type="text"
-              name="nome"
-              value={values.nome}
+              name="titulo"
+              value={values.titulo}
               onChange={handleChange}
             />
 
@@ -105,17 +156,7 @@ function CadastroCategoria() {
         Loading...
       </div>
       )}
-      <ul>
-        {categorias.map((categoria) => (
-          <li key={`${categoria.nome}`}>
-            {categoria.nome}
-            {' - Descrição: '}
-            {categoria.descricao}
-            {' - Cor: '}
-            {categoria.cor}
-          </li>
-        ))}
-      </ul>
+      {loadcasos}
 
     </PageDefault>
   );

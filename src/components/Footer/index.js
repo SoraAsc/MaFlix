@@ -6,7 +6,7 @@ function Footer() {
   return (
     <FooterBase>
       <a href="https://github.com/SoraAsc">
-        <img src={Logo} style={{ width: "115px" }} alt="Logo Alura" />
+        <img src={Logo} style={{ width: '115px' }} alt="Logo Alura" />
       </a>
       <p>
         Orgulhosamente criado durante a

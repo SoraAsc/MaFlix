@@ -1,3 +1,5 @@
+/* eslint-disable spaced-comment */
+/* eslint-disable no-empty */
 /* eslint-disable linebreak-style */
 /* eslint-disable react/prop-types */
 /* eslint-disable indent */
@@ -29,36 +31,78 @@ const styles = {
 };
 
 function FormField({
-    classes, label, type, name, value, onChange,
+    classes, label, type, name, value, onChange, suggestions,
 }) {
     const fieldId = `id_${name}`;
+    const isTypeSelect = type === 'select';
+
+    // const [suggestion, setSuggestion] = React.useState('');
+
+    // const handleChangeSelect = (event) => {
+    //   setSuggestion(event.target.value);
+    // };
+
+    function ChooseFormField() {
+        if (isTypeSelect) {
+            return (
+                <TextField
+                className={classes.textfield}
+                select
+                name={name}
+                value={value}
+                type={type}
+                label={label}
+                onChange={onChange}
+                autoComplete="off"
+                SelectProps={{
+                    native: true,
+                    className: classes.input,
+                  }}
+                >
+                    {suggestions.map((option) => (
+                        <option key={`suggestionFor_${fieldId}option_${option}`} value={option}>
+                            {option}
+                        </option>
+                ))}
+                </TextField>
+            );
+        }
+
+            return (
+                <TextField
+                className={classes.textfield}
+                multiline
+                name={name}
+                value={value}
+                type={type}
+                label={label}
+                variant="filled"
+                onChange={onChange}
+                InputProps={{
+                    className: classes.input,
+                }}
+                />
+            );
+    }
 
     return (
-        <TextField
-            className={classes.textfield}
-            multiline
-            name={name}
-            value={value}
-            type={type}
-            label={label}
-            variant="filled"
-            onChange={onChange}
-            id={fieldId}
-            InputProps={{
-                className: classes.input,
-            }}
-        />
-        // <div>
-        //     <label>
-        //         {label}:
-        //         <input
-        //             type={type}
-        //             value={value}
-        //             name={name}
-        //             onChange={onChange}
-        //         />
-        //     </label>
-        // </div>
+        ChooseFormField()
+        // <TextField
+        //     className={classes.textfield}
+        //     multiline
+        //     name={name}
+        //     value={value}
+        //     type={type}
+        //     label={label}
+        //     variant="filled"
+        //     onChange={onChange}
+        //     // autoComplete='off'
+        //     id={fieldId}
+        //     list={`suggestionFor_${fieldId}`}
+        //     InputProps={{
+        //         className: classes.input,
+        //     }}
+        // />
     );
 }
 
@@ -66,6 +110,7 @@ FormField.defaultProps = {
     type: 'text',
     value: '',
     onChange: () => { },
+    suggestions: [],
 };
 
 FormField.prototype = {
@@ -75,6 +120,7 @@ FormField.prototype = {
     name: PropTypes.string.isRequired,
     value: PropTypes.string,
     onChange: PropTypes.func,
+    suggestions: PropTypes.arrayOf(PropTypes.string),
 };
 
 export default withStyles(styles)(FormField);
